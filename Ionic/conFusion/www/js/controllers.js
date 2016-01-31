@@ -41,7 +41,9 @@ angular.module('conFusion.controllers', [])
   };
 })
 
-  .controller('MenuController', ['$scope', 'menuFactory', function($scope, menuFactory) {
+  .controller('MenuController', ['$scope', 'menuFactory', 'baseURL', function($scope, menuFactory, baseURL) {
+
+    $scope.baseURL = baseURL;
 
     $scope.tab = 1;
     $scope.filtText = '';
@@ -117,7 +119,8 @@ angular.module('conFusion.controllers', [])
     };
   }])
 
-  .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function($scope, $stateParams, menuFactory) {
+  .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', function($scope, $stateParams, menuFactory, baseURL) {
+    $scope.baseURL = baseURL;
 
     $scope.dish = {};
     $scope.showDish = false;
@@ -176,7 +179,8 @@ angular.module('conFusion.controllers', [])
   $scope.promotion = menuFactory.getPromotion().get({id:0});
 }])
 
-  .controller('AboutController', ['$scope', 'corporateFactory', function($scope, corporateFactory) {
+  .controller('AboutController', ['$scope', 'corporateFactory','baseURL', function($scope, corporateFactory,baseURL) {
+    $scope.baseURL = baseURL;
 
     $scope.leaders = corporateFactory.query();
     console.log($scope.leaders);

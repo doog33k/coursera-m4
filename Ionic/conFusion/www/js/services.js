@@ -11,7 +11,7 @@ angular.module('conFusion.services', ['ngResource'])
         image: 'images/buffet.png',
         label:'New',
         price:'19.99',
-        description:'Featuring mouthwatering combinations with a choice of five different salads, six enticing appetizers, six main entrees and five choicest desserts. Free flowing bubbly and soft drinks. All for just $19.99 per person ',
+        description:'Featuring mouthwatering combinations with a choice of five different salads, six enticing appetizers, six main entrees and five choicest desserts. Free flowing bubbly and soft drinks. All for just $19.99 per person '
       }
 
     ];
@@ -55,6 +55,18 @@ angular.module('conFusion.services', ['ngResource'])
           return;
       }
       favorites.push({id: index});
+    };
+
+    favFac.deleteFromFavorites = function (index) {
+      for (var i = 0; i < favorites.length; i++) {
+        if (favorites[i].id == index) {
+          favorites.splice(i, 1);
+        }
+      }
+    }
+
+    favFac.getFavorites = function () {
+      return favorites;
     };
 
     return favFac;

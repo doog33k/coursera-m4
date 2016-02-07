@@ -154,12 +154,40 @@ angular.module('conFusion.controllers', [])
     };
   }])
 
-  .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', function($scope, $stateParams, menuFactory, baseURL) {
+  .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', '$ionicPopover',  'favoriteFactory', function($scope, $stateParams, menuFactory, baseURL,$ionicPopover, favoriteFactory) {
     $scope.baseURL = baseURL;
 
     $scope.dish = {};
     $scope.showDish = false;
     $scope.message="Loading ...";
+
+    // .fromTemplateUrl() method
+    $ionicPopover.fromTemplateUrl('templates/dish-detail-popover.html', {
+      scope: $scope
+    }).then(function(popover) {
+      $scope.popover = popover;
+    });
+
+    $scope.openPopover = function($event) {
+      $scope.popover.show($event);
+    };
+    $scope.closePopover = function() {
+      $scope.popover.hide();
+    };
+    //Cleanup the popover when we're done with it!
+    $scope.$on('$destroy', function() {
+      $scope.popover.remove();
+    });
+    // Execute action on hide popover
+    $scope.$on('popover.hidden', function() {
+      // Execute action
+    });
+    // Execute action on remove popover
+    $scope.$on('popover.removed', function() {
+      // Execute action
+    });
+
+
 
     $scope.dish = menuFactory.getDishes().get({id:parseInt($stateParams.id,10)})
       .$promise.then(
@@ -171,7 +199,13 @@ angular.module('conFusion.controllers', [])
           $scope.message = "Error: "+response.status + " " + response.statusText;
         }
       );
+    ;
 
+    $scope.addFavorite = function () {
+      console.log("DishDetailController : index is " + $scope.dish.id);
+      favoriteFactory.addToFavorites($scope.dish.id);
+      $scope.closePopover();
+    }
 
   }])
 

@@ -154,7 +154,7 @@ angular.module('conFusion.controllers', [])
     };
   }])
 
-  .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', '$ionicPopover',  'favoriteFactory', function($scope, $stateParams, menuFactory, baseURL,$ionicPopover, favoriteFactory) {
+  .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', '$ionicPopover',  'favoriteFactory', '$ionicModal', '$timeout', function($scope, $stateParams, menuFactory, baseURL,$ionicPopover, favoriteFactory,$ionicModal, $timeout) {
     $scope.baseURL = baseURL;
 
     $scope.dish = {};
@@ -206,6 +206,46 @@ angular.module('conFusion.controllers', [])
       favoriteFactory.addToFavorites($scope.dish.id);
       $scope.closePopover();
     }
+
+    // Form data for the login modal
+    $scope.commentData = {};
+
+    // Create the login modal that we will use later
+    $ionicModal.fromTemplateUrl('templates/dish-comment.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+
+    // Triggered in the login modal to close it
+    $scope.closeComment = function() {
+      $scope.modal.hide();
+    };
+
+    // Open the login modal
+    $scope.comment = function() {
+      $scope.closePopover();
+      $scope.modal.show();
+    };
+
+    // Perform the login action when the user submits the login form
+    $scope.doComment = function() {
+      $scope.commentData.date = new Date().toISOString();
+      console.log('Doing Comment...', $scope.commentData.rating + ',' + $scope.commentData.author + ',' + $scope.commentData.comment + ',' +$scope.commentData.date );
+
+      $scope.dish.comments.push($scope.commentData);
+      menuFactory.getDishes().update({id:$scope.dish.id},$scope.dish);
+
+
+      $scope.commentData = {rating:"", comment:"", author:"", date:""};
+
+      // Simulate a login delay. Remove this and replace with your login
+      // code if using a login system
+      $timeout(function() {
+        $scope.closeComment();
+      }, 1000);
+    };
+
 
   }])
 
